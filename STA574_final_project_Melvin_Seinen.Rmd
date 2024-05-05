@@ -1,0 +1,572 @@
+---
+title: "STA574"
+author: "Melvin Seinen"
+date: "2024-05-05"
+output: word_document
+---
+```{r}
+library(tidyr)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(readxl)
+library(openxlsx)
+library(tidymodels)
+```
+
+Section 1: Census data
+
+```{r}
+#CENSUS DATA
+url_CENSUS<-"https://github.com/MelvinSeinen/STA574/raw/main/population-change-data-table.xlsx"
+CENSUS_DATA<-read.xlsx(url_CENSUS)
+
+
+names(CENSUS_DATA) <- make.unique(names(CENSUS_DATA))
+CENSUS_DATA<-CENSUS_DATA%>%
+  slice(-(1:3))
+
+CENSUS_DATA[1, 1] <- "State"
+CENSUS_DATA[1, 10] <- "State"
+CENSUS_DATA[1, 19] <- "State"
+
+colnames(CENSUS_DATA) <- as.character(unlist(CENSUS_DATA[1, ]))
+CENSUS_DATA <- CENSUS_DATA[-1, ]
+
+
+CENSUS_DATA<-CENSUS_DATA%>%
+  select(c(-3,-5,-7,-9:-27))%>%
+  mutate_at(vars(2:5), as.numeric)
+
+
+CENSUS_DATA <- head(CENSUS_DATA, n = nrow(CENSUS_DATA) - 2)
+
+
+#estimated population 1990-2000
+
+CENSUS_DATA$increments_1990_2000 <- (CENSUS_DATA$`Resident Population 2000 Census` - CENSUS_DATA$`Resident Population 1990 Census`) / 10
+
+Year_1991 <- CENSUS_DATA %>%
+  mutate(Population = `Resident Population 1990 Census` + `increments_1990_2000`) %>%
+  mutate(Year = 1991) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+
+Year_1992 <- Year_1991 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1992) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+Year_1993 <- Year_1992 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1993) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+
+Year_1994 <- Year_1993 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1994) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+Year_1995 <- Year_1994 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1995) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+
+Year_1996 <- Year_1995 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1996) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+
+Year_1997 <- Year_1996 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1997) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+
+Year_1998 <- Year_1997 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1998) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+Year_1999 <- Year_1998 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 1999) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+Year_2000 <- Year_1999 %>%
+  mutate(Population = `Population` + `increments_1990_2000`) %>%
+  mutate(Year = 2000) %>%
+  select(State,Year, Population,increments_1990_2000)
+
+
+#estimated population 2000-2010
+
+CENSUS_DATA$increments_2000_2010 <- (CENSUS_DATA$`Resident Population 2010 Census` - CENSUS_DATA$`Resident Population 2000 Census`) / 10
+
+Year_2001 <- CENSUS_DATA %>%
+  mutate(Population = `Resident Population 2000 Census` + `increments_2000_2010`) %>%
+  mutate(Year = 2001) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2002 <- Year_2001 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2002) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2003 <- Year_2002 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2003) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2004 <- Year_2003 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2004) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2005 <- Year_2004 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2005) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2006 <- Year_2005 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2006) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2007 <- Year_2006 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2007) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2008 <- Year_2007 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2008) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+Year_2009 <- Year_2008 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2009) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+
+Year_2010 <- Year_2009 %>%
+  mutate(Population = `Population` + `increments_2000_2010`) %>%
+  mutate(Year = 2010) %>%
+  select(State,Year, Population,increments_2000_2010)
+
+
+
+#estimated population 2010-2021
+
+CENSUS_DATA$increments_2010_2023 <- (CENSUS_DATA$`Resident Population 2020 Census` - CENSUS_DATA$`Resident Population 2010 Census`) / 10
+
+Year_2011 <- CENSUS_DATA %>%
+  mutate(Population = `Resident Population 2010 Census` + `increments_2010_2023`) %>%
+  mutate(Year = 2011) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2012<- Year_2011 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2012) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2013<- Year_2012 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2013) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+
+Year_2014<- Year_2013 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2014) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2015<- Year_2014 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2015) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+
+Year_2016<- Year_2015 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2016) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2017<- Year_2016 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2017) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2018<- Year_2017 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2018) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+
+Year_2019<- Year_2018 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2019) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2020<- Year_2019 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2020) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2021<- Year_2020 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2021) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+
+Year_2022<- Year_2021 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2022) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_2023<- Year_2022 %>%
+  mutate(Population = `Population` + `increments_2010_2023`) %>%
+  mutate(Year = 2023) %>%
+  select(State,Year, Population,increments_2010_2023)
+
+Year_1991<- Year_1991[, -4]
+Year_1992<- Year_1992[, -4]
+Year_1993<- Year_1993[, -4]
+Year_1994<- Year_1994[, -4]
+Year_1995<- Year_1995[, -4]
+Year_1996<- Year_1996[, -4]
+Year_1997<- Year_1997[, -4]
+Year_1998<- Year_1998[, -4]
+Year_1999<- Year_1999[, -4]
+Year_2000<- Year_2000[, -4]
+Year_2001<- Year_2001[, -4]
+Year_2002<- Year_2002[, -4]
+Year_2003<- Year_2003[, -4]
+Year_2004<- Year_2004[, -4]
+Year_2005<- Year_2005[, -4]
+Year_2006<- Year_2006[, -4]
+Year_2007<- Year_2007[, -4]
+Year_2008<- Year_2008[, -4]
+Year_2009<- Year_2009[, -4]
+Year_2010<- Year_2010[, -4]
+Year_2011<- Year_2011[, -4]
+Year_2012<- Year_2012[, -4]
+Year_2013<- Year_2013[, -4]
+Year_2014<- Year_2014[, -4]
+Year_2015<- Year_2015[, -4]
+Year_2016<- Year_2016[, -4]
+Year_2017<- Year_2017[, -4]
+Year_2018<- Year_2018[, -4]
+Year_2019<- Year_2019[, -4]
+Year_2020<- Year_2020[, -4]
+Year_2021<- Year_2021[, -4]
+Year_2022<- Year_2022[, -4]
+Year_2023<- Year_2023[, -4]
+
+
+CENSUS_POP<-rbind(Year_1998,Year_1999,Year_2000,Year_2001,Year_2002,Year_2003,Year_2004,Year_2005,Year_2006,Year_2007,Year_2008,Year_2009,Year_2010,Year_2011,Year_2012,Year_2013,Year_2014,Year_2015,Year_2016,Year_2017,Year_2018,Year_2019,Year_2020,Year_2021,Year_2022,Year_2023)
+
+CENSUS_POP<-CENSUS_POP%>%
+  arrange(State, Year)
+
+rownames(CENSUS_POP) <- NULL
+
+CENSUS_POP$Population<- round(CENSUS_POP$Population)
+
+
+rm(Year_1991,Year_1992,Year_1993,Year_1994,Year_1995,Year_1996,Year_1997,Year_1998,Year_1999,Year_2000,Year_2001,Year_2002,Year_2003,Year_2004,Year_2005,Year_2006,Year_2007,Year_2008,Year_2009,Year_2010,Year_2011,Year_2012,Year_2013,Year_2014,Year_2015,Year_2016,Year_2017,Year_2018,Year_2019,Year_2020,Year_2021,Year_2022,Year_2023,CENSUS_DATA,url_CENSUS)
+```
+
+Section 2: FBI background check data
+
+```{r}
+url<-"https://github.com/MelvinSeinen/STA574/raw/main/nics-firearm-background-checks.csv"
+#data backgroundcheck
+df_BC <- read_csv(url,show_col_types = FALSE)%>%
+  filter(!state %in% c("Hawaii","District of Columbia", "Guam", "Mariana Islands", "Puerto Rico", "Virgin Islands"))
+
+
+
+#Data backgroundcheck; clean data
+df_BC_2 <- separate(df_BC, month, into = c("Year", "Month_num"), sep = "-", remove=FALSE)%>%
+  mutate_at(vars(Year, Month_num), as.numeric)%>%
+  select(state,month,Year,Month_num,totals)%>% 
+  rename(State = state)
+
+rm(url,df_BC)
+```
+
+section 3: combines CENSUS+FBI background check
+
+```{r}
+
+df_census_and_BC<-df_BC_2%>%
+  left_join(.,CENSUS_POP, by=c("State","Year"))%>%
+  mutate(avg_bgcheck=totals/Population)
+
+#
+
+df_census_and_BC_2<-df_census_and_BC%>%
+  select(c(State,Year,avg_bgcheck))%>%
+  group_by(State, Year) %>%
+  summarize(avg_year = mean(avg_bgcheck),.groups = "drop")%>%
+  mutate(avg_by_1000=avg_year*1000)
+
+
+  
+rm(df_census_and_BC,df_BC_2)
+```
+
+Section 4: adding covid & location variables
+
+```{r}
+df_1<-df_census_and_BC_2%>%
+  select(State,Year,avg_by_1000)%>% 
+  mutate(covid_year = ifelse(Year %in% 1998:2019, 0, 
+                             ifelse(Year %in% 2020:2023, 1, NA)))
+
+southern_states <- c("Alabama", "Arkansas", "Florida", "Georgia", "Kentucky","Louisiana",
+                     "Mississippi", "North Carolina", "South Carolina", "Tennessee", 
+                     "Texas", "Virginia", "West Virginia")
+
+df_1 <- df_1 %>%
+  mutate(is_southern = if_else(State %in% southern_states, 1, 0))
+
+rm(df_census_and_BC_2,southern_states)
+```
+
+
+Section 5: adding mortality rate (CDC data)
+
+```{r}
+url_CDC<-"https://github.com/MelvinSeinen/STA574/raw/main/cdc_Copy.xlsx"
+
+
+CDC<-read.xlsx(url_CDC)
+
+
+CDC_2<-CDC%>%
+  rename(State = STATE)%>%
+  rename(Year= YEAR)%>%
+mutate(State = case_when(
+State=="AL"~"Alabama",
+State=="AK"~"Alaska",
+State=="AZ"~"Arizona",
+State=="AR"~"Arkansas",
+State=="CA"~"California",
+State=="CO"~"Colorado",
+State=="CT"~"Connecticut",
+State=="DE"~"Delaware",
+State=="FL"~"Florida",
+State=="GA"~"Georgia",
+State=="ID"~"Idaho",
+State=="IL"~"Illinois",
+State=="IN"~"Indiana",
+State=="IA"~"Iowa",
+State=="KS"~"Kansas",
+State=="KY"~"Kentucky",
+State=="LA"~"Louisiana",
+State=="ME"~"Maine",
+State=="MD"~"Maryland",
+State=="MA"~"Massachusetts",
+State=="MI"~"Michigan",
+State=="MN"~"Minnesota",
+State=="MS"~"Mississippi",
+State=="MO"~"Missouri",
+State=="MT"~"Montana",
+State=="NE"~"Nebraska",
+State=="NV"~"Nevada",
+State=="NH"~"New Hampshire",
+State=="NJ"~"New Jersey",
+State=="NM"~"New Mexico",
+State=="NY"~"New York",
+State=="NC"~"North Carolina",
+State=="ND"~"North Dakota",
+State=="OH"~"Ohio",
+State=="OK"~"Oklahoma",
+State=="OR"~"Oregon",
+State=="PA"~"Pennsylvania",
+State=="RI"~"Rhode Island",
+State=="SC"~"South Carolina",
+State=="SD"~"South Dakota",
+State=="TN"~"Tennessee",
+State=="TX"~"Texas",
+State=="UT"~"Utah",
+State=="VT"~"Vermont",
+State=="VA"~"Virginia",
+State=="WA"~"Washington",
+State=="WV"~"West Virginia",
+State=="WI"~"Wisconsin",
+State=="WY"~"Wyoming",
+State=="HI"~"Hawaii",
+    TRUE ~ as.character(State)))%>%
+  select(Year,State,DEATHS)
+
+df_1<-df_1%>%
+  left_join(.,CDC_2, by=c("State","Year"))
+
+df_1<-df_1 %>%
+  filter(Year >= 2014 & Year <= 2021)%>%
+  left_join(.,CENSUS_POP,by=c("State","Year"))
+
+
+rm(url_CDC,CDC,CDC_2,CENSUS_POP)
+```
+
+Section 6
+
+```{r}
+df_11<-df_1%>%
+  mutate(avg_death=DEATHS/Population)
+
+#mean_death<-mean(df_11$avg_death)
+
+# Assuming avg_death represents deaths per a smaller population size (e.g., per 1000 people)
+# Transform avg_death to deaths per 1000 people
+df_11$avg_death_per_1000 <- df_11$avg_death * 1000
+
+# Calculate quantiles for the top 20% and bottom 20% of avg_death_per_1000
+quantile_low <- quantile(df_11$avg_death_per_1000, 0.2)
+quantile_high <- quantile(df_11$avg_death_per_1000, 0.8)
+
+# Create a ggplot for avg_death_per_1000
+ggplot(df_11, aes(x = "", y = avg_death_per_1000)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(title = "Distribution of average mortality rate by firearm per 1000 people",
+       y = "Mortaliity rate") +
+  theme_minimal() +
+  geom_hline(yintercept = quantile_low, linetype = "dashed", color = "darkgreen") +  # Bottom 20% quantile line
+  geom_hline(yintercept = quantile_high, linetype = "dashed", color = "red") +  # Top 20% quantile line
+  annotate("text", x = 1, y = quantile_low, 
+           label = paste("Bottom 20% Quantile:", format(quantile_low, scientific = FALSE, digits = 3)), 
+           vjust = 1.2, color = "darkgreen") +
+  annotate("text", x = 1, y = quantile_high, 
+           label = paste("Top 20% Quantile:", format(quantile_high, scientific = FALSE, digits = 3)), 
+           vjust = -0.2, color = "red") +
+  theme(axis.title.x = element_blank(),  
+        axis.text.x = element_blank(),   
+        axis.line.x = element_blank())  
+```
+
+Section 7
+
+```{r}
+df_11$death_rank <- ifelse(df_11$avg_death_per_1000 <= quantile_low, 'low',
+                           ifelse(df_11$avg_death_per_1000 >= quantile_high, 'high', NA))
+
+# Replace 'high' with 1 and 'low' with 0 in the 'death_rank' column
+df_11$death_rank_num <- ifelse(df_11$death_rank == 'high', 1,
+                           ifelse(df_11$death_rank == 'low', 0, NA))
+
+
+df_11 <- df_11[complete.cases(df_11$death_rank), ]
+
+
+
+df_11 <- df_11 %>%
+   mutate(
+      Southern.ctg = case_when(
+         is_southern == 0 ~ "Not a southern state",
+         is_southern == 1 ~ "Southern State"
+      ),
+      Southern.fct = factor( Southern.ctg, levels = c("Not a southern state","Southern State") )
+   )
+
+#exclude outliers:
+df_11<-df_11 %>%
+  filter(!(State == "Kentucky" & (Year == 2020 | Year == 2021)))
+
+
+fit_m0 <- glm( death_rank_num ~ 1, family=binomial(link="logit"), data=df_11 )
+summary( fit_m0 )
+
+fit_m1 <- glm( death_rank_num ~ avg_by_1000, family=binomial(link="logit"), data=df_11 )
+summary( fit_m1)
+
+fit_m2 <- glm( death_rank_num ~ avg_by_1000 + factor(is_southern), family=binomial(link="logit"), data=df_11 )
+summary( fit_m2)
+
+fit_m3 <- glm( death_rank_num ~ avg_by_1000 + factor(is_southern) + factor(covid_year), family=binomial(link="logit"), data=df_11 )
+summary( fit_m3)
+
+fit_m4 <- glm( death_rank_num ~ avg_by_1000 +factor(is_southern) + factor(covid_year)+ avg_by_1000:factor(covid_year), family=binomial(link="logit"), data=df_11 )
+summary( fit_m3)
+
+
+
+anova(fit_m0,fit_m1, test="LRT")
+anova(fit_m1,fit_m2, test="LRT")
+anova(fit_m2,fit_m3, test="LRT")
+anova(fit_m3,fit_m4, test="LRT")
+
+```
+```{r}
+rm(df_1,fit_m0,fit_m1,fit_m3,fit_m4,quantile_high,quantile_low)
+```
+
+
+
+Section 8
+
+```{r}
+fit_opt <- fit_m2                      
+
+df_11_pred <- df_11 %>%
+   mutate(
+     is_southern.ctg = factor(is_southern),
+     pi_est = predict( fit_opt, type="response" )
+   )
+
+head( df_11_pred )
+
+ggplot( df_11_pred, aes( x=avg_by_1000, y=jitter(death_rank_num,0.05), col=is_southern.ctg ) ) +
+   geom_point( ) +
+   geom_line( aes( y=pi_est, group=is_southern.ctg, col=is_southern.ctg ) ) +
+   xlab("Average number of backgroundchecks by 1000 persons") + ylab("High versus low firearm death rate") +
+   scale_color_manual( values = c( "gold", "red") ) +
+   theme_bw()
+```
+
+Section 8
+
+```{r}
+pi_est.sample <- sum(df_11$death_rank_num) / nrow(df_11)
+pi_est.sample
+
+
+y_est <- as.numeric( fit_opt$fit > pi_est.sample )   # predict as y=1 when estimated pi > sample proportion
+y_est
+
+tb.classif_ini <- xtabs( ~ df_11$death_rank_num + y_est )
+tb.classif_ini
+
+
+tb.classif <- data.frame( tb.classif_ini ) %>%
+   mutate(
+      y = factor( df_11.death_rank_num, levels=c("1","0") ),
+      y_pred = factor( y_est, levels=c("1","0") ),
+      count = Freq
+   )
+
+tb.classif <- xtabs( count ~ y + y_pred, data=tb.classif  )
+tb.classif
+
+library(knitr)
+
+# Display dataframe using knitr::kable
+kable(tb.classif, format = "markdown")
+
+
+sensitivity <- tb.classif[1,1] / sum(tb.classif[1,])
+specificity  <- tb.classif[2,2] / sum( tb.classif[2,] )
+#prob_correct.1 <- sum( diag( tb.classif ) ) / sum( tb.classif)
+prob_correct.2 <- sensitivity*( sum( tb.classif[1,] )/sum( tb.classif ) ) +
+                  specificity*( sum( tb.classif[2,] )/sum( tb.classif ) )
+
+k<-cbind( sensitivity, specificity,  prob_correct.2 )
+```
+
+
